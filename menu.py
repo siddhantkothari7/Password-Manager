@@ -256,23 +256,26 @@ def passwordVault():
 
     window.geometry("700x550")
 
+    def copyPass():
+        pyperclip.copy(lbl1.cget("text"))
+
     lbl = Label(window, text="Password Vault")
     lbl.config(anchor=CENTER)    
     lbl.grid(column=1)
 
-### BUtton to create new Password Entry
+### Button to create new Password Entry
     btn = Button(window, text= " + ", command=addEntry)
     btn.grid(column=1, pady=10)
 
 ### Grid Structure of Password Vault
     lbl = Label(window, text="website")
-    lbl.grid(row=2, column=0, padx=80)
+    lbl.grid(row=2, column=0, padx=50)
 
     lbl = Label(window, text="username")
-    lbl.grid(row=2, column=1, padx=80)
+    lbl.grid(row=2, column=1, padx=50)
 
     lbl = Label(window, text="password")
-    lbl.grid(row=2, column=2, padx=80)
+    lbl.grid(row=2, column=2, padx=50)
 
 ### Retrieving Database values to Display
     cursor.execute("SELECT * FROM vault")
@@ -294,8 +297,11 @@ def passwordVault():
             lbl1 = Label(window, text=(decrypt(array[i][3], encryptionKey)), font=("Helvetica", 12))
             lbl1.grid(column=2, row= i+3)
 
+            btn1 = Button(window, text="Copy Password", command=partial(copyPass, array[i][0]))
+            btn1.grid(column=3, row=i+3, padx=10, pady=10)
+
             btn = Button(window, text="Delete", command= partial(removeEntry, array[i][0]))
-            btn.grid(column=3, row=i+3, pady=10)
+            btn.grid(column=4, row=i+3, pady=10)
 
             i += 1
             
