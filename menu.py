@@ -11,6 +11,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 from cryptography.fernet import Fernet
+import codecs
 
 
 backend = default_backend()
@@ -294,14 +295,30 @@ def passwordVault():
             lbl1 = Label(window, text=(decrypt(array[i][2], encryptionKey)), font=("Helvetica", 12))
             lbl1.grid(column=1, row= i+3)
 
-            lbl1 = Label(window, text=(decrypt(array[i][3], encryptionKey)), font=("Helvetica", 12))
+            pw = decrypt(array[i][3], encryptionKey)
+
+            ret_pass = ["*" for i in pw]
+            ret_pass = "".join(ret_pass)
+
+            lbl1 = Label(window, text=ret_pass, font=("Helvetica", 12))
             lbl1.grid(column=2, row= i+3)
 
-            btn1 = Button(window, text="Copy Password", command=partial(copyPass, array[i][0]))
-            btn1.grid(column=3, row=i+3, padx=10, pady=10)
+            def showPass(start, i):
+                # if start == 0:
+                lbl1 = Label(window, text=(decrypt(array[i][3], encryptionKey)), font=("Helvetica", 12))
+                lbl1.grid(column=2, row= i+3)
+              
+            btn = Button(window, text='Show', command=partial(showPass, 0, i))
+            btn.grid(column=3, row=i+3, padx= 10, pady=10)
+
+            def copyPass(pw):
+                pyperclip.copy(pw)
+
+            btn1 = Button(window, text="Copy Password", command= partial(copyPass, codecs.decode((decrypt(array[i][3], encryptionKey)))))
+            btn1.grid(column=4, row=i+3, padx=10, pady=10)
 
             btn = Button(window, text="Delete", command= partial(removeEntry, array[i][0]))
-            btn.grid(column=4, row=i+3, pady=10)
+            btn.grid(column=5, row=i+3, pady=10)
 
             i += 1
             
