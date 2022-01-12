@@ -12,6 +12,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 from cryptography.fernet import Fernet
 import codecs
+import time
 
 
 backend = default_backend()
@@ -270,13 +271,13 @@ def passwordVault():
 
 ### Grid Structure of Password Vault
     lbl = Label(window, text="website")
-    lbl.grid(row=2, column=0, padx=50)
+    lbl.grid(row=2, column=0, padx=30)
 
     lbl = Label(window, text="username")
-    lbl.grid(row=2, column=1, padx=50)
+    lbl.grid(row=2, column=1, padx=30)
 
     lbl = Label(window, text="password")
-    lbl.grid(row=2, column=2, padx=50)
+    lbl.grid(row=2, column=2, padx=30)
 
 ### Retrieving Database values to Display
     cursor.execute("SELECT * FROM vault")
@@ -302,13 +303,14 @@ def passwordVault():
 
             lbl1 = Label(window, text=ret_pass, font=("Helvetica", 12))
             lbl1.grid(column=2, row= i+3)
-
-            def showPass(start, i):
-                # if start == 0:
+                
+            def showPass(i):
                 lbl1 = Label(window, text=(decrypt(array[i][3], encryptionKey)), font=("Helvetica", 12))
-                lbl1.grid(column=2, row= i+3)
-              
-            btn = Button(window, text='Show', command=partial(showPass, 0, i))
+                lbl1.grid(column=2, row= i+3)     
+                time.sleep(5)  
+                passwordVault()
+
+            btn = Button(window, text='Show/hide', command=partial(showPass, i))
             btn.grid(column=3, row=i+3, padx= 10, pady=10)
 
             def copyPass(pw):
